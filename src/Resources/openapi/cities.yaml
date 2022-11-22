@@ -1,0 +1,205 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://api.forecast.io/api/v3'
+info:
+  description: >-
+    This API serves cities forecast information.
+  version: 3.0.0
+  title: Forecast API
+  license:
+    name: Apache-2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /cities/{cityId}:
+    get:
+      summary: Find city forecasts
+      description: ''
+      operationId: findCityForecasts
+      parameters:
+        - name: cityId
+          in: path
+          description: ID of city to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: day
+          in: query
+          example: '2022-11-19'
+          description: Filter forecasts using day
+          required: false
+          schema:
+            type: string
+            pattern: '^\d{4}-\d{2}-\d{2}$'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LocationForecast'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationForecast'
+        '400':
+          description: Invalid date value
+      security:
+        - forecast_auth:
+            - 'read:forecast'
+    post:
+      summary: Add a new forecast to city
+      description: ''
+      operationId: addForecast
+      parameters:
+        - name: cityId
+          in: path
+          description: ID of city
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LocationForecast'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationForecast'
+        '405':
+          description: Invalid input
+      security:
+        - forecast_auth:
+            - 'write:forecast'
+            - 'read:forecast'
+      requestBody:
+        $ref: '#/components/requestBodies/Forecast'
+    put:
+      summary: Replace a forecast to city
+      description: ''
+      operationId: replaceForecast
+      parameters:
+        - name: cityId
+          in: path
+          description: ID of city
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/LocationForecast'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationForecast'
+        '405':
+          description: Invalid input
+      security:
+        - forecast_auth:
+            - 'write:forecast'
+            - 'read:forecast'
+      requestBody:
+        $ref: '#/components/requestBodies/Forecast'
+
+components:
+  requestBodies:
+    Forecast:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForecastForm'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/ForecastForm'
+      description: Forecast of city on single date
+      required: true
+  securitySchemes:
+    forecast_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'https://api.forecast.io/api/v3/oauth/dialog'
+          scopes:
+            'write:forecast': add/modify forecast
+            'read:forecast': read forecast
+  schemas:
+    ForecastForm:
+      title: Form of forecast
+      description: ''
+      type: object
+      required:
+        - date
+        - min_temp
+        - max_temp
+        - avg_temp
+      properties:
+        date:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+          example: '2022-11-19'
+        min_temp:
+          type: number
+          format: float
+        max_temp:
+          type: number
+          format: float
+        avg_temp:
+          type: number
+          format: float
+      xml:
+        name: ForecastForm
+      example:
+        date: '2022-11-19'
+        min_temp: 26.5
+        max_temp: 35.5
+        avg_temp: 30.0
+    Location:
+      title: Location
+      description: ''
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: London
+        country:
+          type: string
+          example: United Kingdom
+      xml:
+        name: Location
+    Forecast:
+      title: 'Forecast'
+      description: ''
+      type: object
+      properties:
+        min_temp:
+          type: number
+          format: float
+        max_temp:
+          type: number
+          format: float
+        avg_temp:
+          type: number
+          format: float
+        # TODO we can extend the properties as we want (example: wind, rain etc..)
+      xml:
+        name: Forecast
+    LocationForecast:
+      title: Forecast of location
+      description: Forecast for a city for a day
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/Location'
+        forecast:
+          type: array
+          items:
+            $ref: '#/components/schemas/Forecast'
