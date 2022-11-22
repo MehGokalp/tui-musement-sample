@@ -10,7 +10,7 @@ info:
     name: Apache-2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /cities/{cityId}:
+  /forecast/{cityId}:
     get:
       summary: Find city forecasts
       description: ''
@@ -75,7 +75,7 @@ paths:
             - 'write:forecast'
             - 'read:forecast'
       requestBody:
-        $ref: '#/components/requestBodies/Forecast'
+        $ref: '#/components/requestBodies/BulkForecast'
     put:
       summary: Replace a forecast to city
       description: ''
@@ -105,7 +105,7 @@ paths:
             - 'write:forecast'
             - 'read:forecast'
       requestBody:
-        $ref: '#/components/requestBodies/Forecast'
+        $ref: '#/components/requestBodies/BulkForecast'
 
 components:
   requestBodies:
@@ -119,6 +119,16 @@ components:
             $ref: '#/components/schemas/ForecastForm'
       description: Forecast of city on single date
       required: true
+    BulkForecast:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkForecastForm'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/BulkForecastForm'
+      description: Forecast of city on multiple dates
+      required: true
   securitySchemes:
     forecast_auth:
       type: oauth2
@@ -129,6 +139,13 @@ components:
             'write:forecast': add/modify forecast
             'read:forecast': read forecast
   schemas:
+    BulkForecastForm:
+      title: Bulk form of forecast
+      type: array
+      items:
+        $ref: '#/components/schemas/ForecastForm'
+      xml:
+        wrapped: true
     ForecastForm:
       title: Form of forecast
       description: ''
@@ -167,6 +184,7 @@ components:
         id:
           type: integer
           format: int64
+          example: 585437
         name:
           type: string
           example: London
@@ -180,6 +198,8 @@ components:
       description: ''
       type: object
       properties:
+        date:
+          type: string
         min_temp:
           type: number
           format: float
@@ -190,6 +210,11 @@ components:
           type: number
           format: float
         # TODO we can extend the properties as we want (example: wind, rain etc..)
+      example:
+        date: 2022-11-19
+        min_temp: 30.5
+        max_temp: 50.0
+        avg_temp: 35.9
       xml:
         name: Forecast
     LocationForecast:
@@ -200,6 +225,9 @@ components:
         location:
           $ref: '#/components/schemas/Location'
         forecast:
+          xml:
+            wrapped: true
+            name: Forecast
           type: array
           items:
             $ref: '#/components/schemas/Forecast'
