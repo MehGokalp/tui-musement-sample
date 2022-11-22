@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: deployment/docker/dev/php
+    restart: on-failure
+    volumes:
+      - ".:/var/www/html"
+      - "./deployment/docker/dev/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
