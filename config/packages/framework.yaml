@@ -17,6 +17,18 @@ framework:
     php_errors:
         log: true
 
+    http_client:
+        default_options:
+            retry_failed:
+                # only retry errors with these HTTP codes
+                http_codes: [ 429, 500 ]
+                max_retries: 2
+                # waiting time between retries (in milliseconds)
+                delay: 1000
+                # if set, the waiting time of each retry increases by this factor
+                # (e.g. first retry: 1000ms; second retry: 3 * 1000ms; etc.)
+                multiplier: 3
+
 when@test:
     framework:
         test: true

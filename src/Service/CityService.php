@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use App\Api\Musement\Endpoint\City\CityEndpoint;
-use Psr\Log\LoggerInterface;
 use App\Api\Musement\Endpoint\City\Response\CityItem;
+use Psr\Log\LoggerInterface;
 
 class CityService
 {
@@ -30,7 +30,7 @@ class CityService
                     ],
                 ]);
 
-                if (0 === count($response)) {
+                if (0 === \count($response)) {
                     break;
                 }
 

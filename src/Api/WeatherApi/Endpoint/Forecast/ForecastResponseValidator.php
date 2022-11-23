@@ -16,7 +16,7 @@ class ForecastResponseValidator implements ValidatorInterface
      */
     public function validate(): void
     {
-        $jsonResponse = json_decode($this->rawResponse, true, 512, JSON_THROW_ON_ERROR);
+        $jsonResponse = json_decode($this->rawResponse, true, 512, \JSON_THROW_ON_ERROR);
 
         if (!isset($jsonResponse['forecast']['forecastday'])) {
             throw new ApiException('invalid response');

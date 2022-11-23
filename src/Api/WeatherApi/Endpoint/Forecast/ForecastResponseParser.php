@@ -13,7 +13,7 @@ class ForecastResponseParser implements ParserInterface
      */
     public function parse(string $rawResponse): ForecastResponse
     {
-        $jsonResponse = json_decode($rawResponse, true, 512, JSON_THROW_ON_ERROR);
+        $jsonResponse = json_decode($rawResponse, true, 512, \JSON_THROW_ON_ERROR);
 
         /** @var []ForecastItem $parsedItems */
         $parsedItems = [];

@@ -13,7 +13,7 @@ class CityResponseParser implements ParserInterface
      */
     public function parse(string $rawResponse): CityResponse
     {
-        $jsonResponse = json_decode($rawResponse, true, 512, JSON_THROW_ON_ERROR);
+        $jsonResponse = json_decode($rawResponse, true, 512, \JSON_THROW_ON_ERROR);
 
         /** @var []CityItem $parsedItems */
         $parsedItems = [];

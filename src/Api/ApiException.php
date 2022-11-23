@@ -11,9 +11,6 @@ class ApiException extends \Exception
         parent::__construct($message, 0, $previous);
     }
 
-    /**
-     * @return ResponseInterface|null
-     */
     public function getResponse(): ?ResponseInterface
     {
         return $this->response;
