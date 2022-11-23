@@ -12,7 +12,7 @@ info:
 paths:
   /forecast/{cityId}:
     get:
-      summary: Find city forecasts
+      summary: Find city's forecasts
       description: ''
       operationId: findCityForecasts
       parameters:
@@ -77,7 +77,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/BulkForecast'
     put:
-      summary: Replace a forecast to city
+      summary: Replace forecasts to city
       description: ''
       operationId: replaceForecast
       parameters:
