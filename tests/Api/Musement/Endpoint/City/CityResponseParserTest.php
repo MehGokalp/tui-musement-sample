@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Musement\Endpoint\City;
+namespace App\Tests\Api\Musement\Endpoint\City;
 
 use App\Api\Musement\Endpoint\City\CityResponseParser;
 use App\Api\Musement\Endpoint\City\Response\CityItem;

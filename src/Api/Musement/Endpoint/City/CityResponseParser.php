@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Api\Musement\Endpoint\City;
 
 use App\Api\Musement\Endpoint\City\Response\CityItem;
@@ -22,8 +24,8 @@ class CityResponseParser implements ParserInterface
 
             $parsedItem->id = $item['id'];
             $parsedItem->name = $item['name'];
-            $parsedItem->latitude = $item['latitude'];
-            $parsedItem->longitude = $item['longitude'];
+            $parsedItem->latitude = (string)$item['latitude'];
+            $parsedItem->longitude = (string)$item['longitude'];
 
             $parsedItems[] = $parsedItem;
         }

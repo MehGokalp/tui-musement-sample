@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Api\Musement\Endpoint\City\Response;
 
 use App\Api\Musement\Endpoint\ResponseInterface;

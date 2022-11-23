@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Api\WeatherApi\Endpoint\Forecast\Response;
 
 use App\Api\WeatherApi\Endpoint\ResponseInterface;

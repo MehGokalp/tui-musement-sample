@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\WeatherApi\Endpoint\Forecast;
+namespace App\Tests\Api\WeatherApi\Endpoint\Forecast;
 
 use App\Api\ApiException;
 use App\Api\WeatherApi\Endpoint\Forecast\ForecastResponseValidator;

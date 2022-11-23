@@ -1,15 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Api\WeatherApi;
 
+use Symfony\Component\HttpClient\AsyncDecoratorTrait;
+use Symfony\Component\HttpClient\CachingHttpClient;
+use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\HttpClient\ResponseStreamInterface;
 
 class Client implements HttpClientInterface
 {
-    public function __construct(private readonly HttpClientInterface $decoratedClient, private readonly string $baseUrl, private readonly string $apiKey)
+    use AsyncDecoratorTrait;
+
+    private readonly HttpClientInterface $decoratedClient;
+
+    public function __construct(HttpClientInterface $decoratedClient, StoreInterface $store, private readonly string $baseUrl, private readonly string $apiKey)
     {
+        $this->decoratedClient = new CachingHttpClient($decoratedClient, $store);
     }
 
     public function request(string $method, string $url, array $options = []): ResponseInterface
@@ -22,6 +32,9 @@ class Client implements HttpClientInterface
         return $this->decoratedClient->request($method, $apiUrl, $options);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function stream($responses, float $timeout = null): ResponseStreamInterface
     {
         return $this->decoratedClient->stream($responses, $timeout);
