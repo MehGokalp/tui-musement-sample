@@ -26,3 +26,8 @@ services:
     App\Api\Musement\Client:
         arguments:
             $baseUrl: '%env(MUSEMENT_API_BASE_URL)%'
+
+    App\Api\WeatherApi\Client:
+        arguments:
+            $baseUrl: '%env(WEATHER_API_BASE_URL)%'
+            $apiKey: '%env(WEATHER_API_KEY)%'

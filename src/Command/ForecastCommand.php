@@ -3,11 +3,10 @@
 namespace App\Command;
 
 use App\Service\CityService;
+use App\Service\ForecastService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -17,30 +16,22 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class ForecastCommand extends Command
 {
-    public function __construct(private readonly CityService $cityService)
-    {
-        parent::__construct(null);
-    }
+    private const DEFAULT_FETCH_DATE = 2;
 
-    protected function configure(): void
+    public function __construct(private readonly CityService $cityService, private readonly ForecastService $forecastService)
     {
-        $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-        ;
+        parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $count = 0;
         foreach ($this->cityService->fetchAllCities() as $city) {
-            var_dump($city);
-            $count++;
-        }
+            $forecastResponse = $this->forecastService->fetchForecast($city->latitude, $city->longitude, self::DEFAULT_FETCH_DATE);
 
-        $io->success($count);
+            $io->success(sprintf('Proceed city %s | %s - %s', $city->name, $forecastResponse->items[0]->condition, $forecastResponse->items[1]->condition));
+        }
 
         return Command::SUCCESS;
     }

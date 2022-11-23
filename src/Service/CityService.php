@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Api\Musement\Endpoint\City\CityEndpoint;
 use Psr\Log\LoggerInterface;
+use App\Api\Musement\Endpoint\City\Response\CityItem;
 
 class CityService
 {
@@ -13,6 +14,9 @@ class CityService
     {
     }
 
+    /**
+     * @return CityItem[]
+     */
     public function fetchAllCities(): iterable
     {
         $cityIterator = new \AppendIterator();
