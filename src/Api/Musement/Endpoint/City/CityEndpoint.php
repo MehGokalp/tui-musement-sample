@@ -28,10 +28,11 @@ class CityEndpoint implements EndpointInterface
                 throw new ApiException('bad response', null, $response);
             }
 
-            $validator = new CityResponseValidator($response->getContent());
+            $content = $response->getContent();
+            $validator = new CityResponseValidator($content);
             $validator->validate();
 
-            return $this->cityResponseParser->parse($response->getContent());
+            return $this->cityResponseParser->parse($content);
         } catch (TransportExceptionInterface|HttpExceptionInterface|\JsonException $e) {
             throw new ApiException('error occurred', $e);
         }
